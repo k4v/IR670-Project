@@ -6,6 +6,7 @@ from scrapy.settings import Settings
 from scrapy.xlib.pydispatch import dispatcher
 from scrapy import log, signals
 from scrapy_wrapper import LinkedInSpider
+from scrapy_wrapper import AuthLinkedInSpider
 from twisted.internet import reactor
 
 
@@ -22,7 +23,7 @@ people_map = ['http://in.linkedin.com/pub/nitish-kumar/45/58b/29', 'http://www.l
 
 dispatcher.connect(stop_reactor, signal=signals.spider_closed)
 
-linkedin_spider = LinkedInSpider()
+linkedin_spider = AuthLinkedInSpider()
 
 crawler = Crawler(Settings())
 crawler.configure()
