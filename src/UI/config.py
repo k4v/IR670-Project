@@ -10,6 +10,12 @@ OPENID_PROVIDERS = [
     { 'name': 'Flickr', 'url': 'http://www.flickr.com/<username>' },
     { 'name': 'MyOpenID', 'url': 'https://www.myopenid.com' }]
 
+COMPANY_LIST = [
+    'Amazon', 'Microsoft', 'Yahoo', 'Nvidia', 'Google', 'Facebook', 'Bloomberg'
+]
+
+PROFILE_LIST = ['Software Developer', 'System Engineer']
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')

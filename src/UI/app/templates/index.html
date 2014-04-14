@@ -1,7 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="well">
 <h1>Hi, {{user.nickname}}!</h1>
-{% for post in posts %}
-<div><p>{{post.author.nickname}} says: <b>{{post.body}}</b></p></div>
-{% endfor %}
+<form action="{{ url_for('test') }}" method="post" name="company-profile">
+    {{form.hidden_tag()}}
+    <table width="400">
+    <tr>
+        <td>Select the company</td>
+        <td>{{form.company_list}}</td>
+    </tr>
+    <tr>
+        <td>Job Profile</td>
+        <td>{{form.profile_list}}</td>
+    </tr>
+    </table>
+     <div class="control-group" style="text-align:center">
+        <div class="controls">
+            <input class="btn btn-primary" type="submit" value="Rank Me!" style="height:40px; width:125px">
+        </div>
+    </div>
+</form>
+</div>
 {% endblock %}
