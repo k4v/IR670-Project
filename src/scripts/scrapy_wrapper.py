@@ -17,6 +17,8 @@ class LinkedInItem(Item):
 class AuthLinkedInSpider(InitSpider):
     name = 'AuthLinkedIn'
     allowed_domains = ['linkedin.com']
+
+    # Amazon
     start_urls = ['http://www.linkedin.com/pub/nitish-kumar/45/58b/29', 'http://www.linkedin.com/in/viditochani',
                   'http://www.linkedin.com/pub/denis-bellavance/5/b15/63a', 'http://www.linkedin.com/in/seansharma',
                   'http://www.linkedin.com/pub/madhwaraj-g-k/10/98/64', 'http://www.linkedin.com/in/kgillett',
@@ -24,9 +26,67 @@ class AuthLinkedInSpider(InitSpider):
                   'http://www.linkedin.com/pub/nitish-kackar/a/b07/635', 'http://www.linkedin.com/in/rkots',
                   'http://www.linkedin.com/pub/amit-nain/19/519/47a', 'http://www.linkedin.com/in/rachitdhall']
 
+    # Google
+    start_urls.extend(['http://www.linkedin.com/pub/vinu-rajashekhar/41/773/613',
+                       'http://www.linkedin.com/pub/tushar-udeshi/0/186/434',
+                       'http://www.linkedin.com/in/ravikumarmandala', 'http://www.linkedin.com/in/srikanthsastry',
+                       'http://www.linkedin.com/in/vandanabachani', 'http://www.linkedin.com/in/ruchilohani',
+                       'http://www.linkedin.com/in/sauravtiwari',
+                       'http://www.linkedin.com/pub/jasmeet-singh/48/313/225',
+                       'http://www.linkedin.com/in/kusumkumar', 'http://www.linkedin.com/pub/ritesh-gupta/8/47b/490',
+                       'http://www.linkedin.com/in/sushrutkaranjkar',
+                       'http://www.linkedin.com/pub/prakash-mallick/61/ab5/219',
+                       'http://www.linkedin.com/pub/madhusudhan-reddy-adupala/28/7b8/485',
+                       'http://www.linkedin.com/pub/panchapagesan-krishnamurthy/1/7b0/962',
+                       'http://www.linkedin.com/in/bineshandrews',
+                       'http://www.linkedin.com/pub/karanjit-cheema/14/887/8',
+                       'http://www.linkedin.com/pub/roman-kalukiewicz/1/838/997', 'http://www.linkedin.com/in/galiu',
+                       'http://www.linkedin.com/in/tanmaykhirwadkar',
+                       'http://www.linkedin.com/pub/aneesh-mulye/18/331/85',
+                       'http://www.linkedin.com/in/zhouxing', 'http://www.linkedin.com/in/kashyappuranik',
+                       'http://www.linkedin.com/pub/prakash-mallick/61/ab5/219',
+                       'http://www.linkedin.com/pub/garima-agarwal/12/4a3/312',
+                       'http://www.linkedin.com/in/divyasudhakar'])
+
+    # Facebook
+    start_urls.extend(['http://www.linkedin.com/in/tejaspatil1', 'http://www.linkedin.com/in/kapilgoenka',
+                       'http://www.linkedin.com/in/paritoshaggarwal',
+                       'http://www.linkedin.com/pub/adithya-surampudi/1a/b64/797',
+                       'http://www.linkedin.com/in/shuxiu', 'http://www.linkedin.com/in/gauravmenghani',
+                       'http://www.linkedin.com/in/abhishekkona', 'http://www.linkedin.com/in/akhilravidas',
+                       'http://www.linkedin.com/pub/nishanth-ps/15/748/333',
+                       'http://www.linkedin.com/pub/keith-adams/5/518/1b4',
+                       'http://www.linkedin.com/in/skoppala', 'http://www.linkedin.com/pub/dipanshu-agrawal/56/4b6/871',
+                       'http://www.linkedin.com/in/nitinisthename',
+                       'http://www.linkedin.com/pub/saurabh-chakradeo/30/b01/7b8',
+                       'http://www.linkedin.com/pub/yueh-hsuan-chiang/81/b25/85a',
+                       'http://www.linkedin.com/in/agrwlgaurav',
+                       'http://www.linkedin.com/in/kurchi', 'http://www.linkedin.com/pub/aravind-anbudurai/46/8a5/916',
+                       'http://www.linkedin.com/pub/avani-nandini/18/137/763',
+                       'http://www.linkedin.com/pub/rishit-shroff/11/609/6b6',
+                       'http://www.linkedin.com/pub/siva-keshava-sastry-popuri/11/5/479',
+                       'http://www.linkedin.com/pub/ben-bharat-b/60/455/4b4'])
+
+    # Nvidia
+    start_urls.extend(
+        ['http://www.linkedin.com/pub/nadir-cazi/14/52b/32', 'http://www.linkedin.com/pub/bharath-h-s/13/43/987',
+         'http://www.linkedin.com/pub/jay-agarwal/a/83/511', 'http://www.linkedin.com/in/spyne',
+         'http://www.linkedin.com/in/contactshashanksharma', 'http://www.linkedin.com/pub/ajay-agarwal/9/853/438',
+         'http://www.linkedin.com/pub/koushik-bhattacharya/17/8a6/947', 'http://www.linkedin.com/in/gpradypkumar',
+         'http://www.linkedin.com/in/sumantadatta', 'http://www.linkedin.com/pub/krishna-vadali/18/6ab/72'])
+
+    # Adobe
+    start_urls.extend(['http://www.linkedin.com/in/shankarv25', 'http://www.linkedin.com/in/vakul',
+                       'http://www.linkedin.com/in/gauravright85', 'http://www.linkedin.com/pub/anirudh-singh/8/2b/867',
+                       'http://www.linkedin.com/in/guptasushant16', 'http://www.linkedin.com/pub/vinod-thak/16/170/748',
+                       'http://www.linkedin.com/pub/ashish-agarwal/1b/939/2b4',
+                       'http://www.linkedin.com/pub/ravi-chaudhary/1b/824/b1',
+                       'http://www.linkedin.com/pub/mosum-gaba/6/345/74',
+                       'http://www.linkedin.com/pub/shruti-gupta/10/71/1a0'])
+
     login_page = 'https://www.linkedin.com/uas/login'
 
-    write_json = open('scraped.json', 'w')
+    write_json = open('all_companies.json', 'w')
     profile_map = {}
 
     def init_request(self):
