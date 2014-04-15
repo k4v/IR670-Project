@@ -12,7 +12,6 @@ from twisted.internet import reactor
 def stop_reactor():
     reactor.stop()
 
-
 dispatcher.connect(stop_reactor, signal=signals.spider_closed)
 
 linkedin_spider = AuthLinkedInSpider()

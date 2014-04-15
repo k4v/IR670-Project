@@ -1,28 +1,29 @@
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from app import app, db, lm, oid
-from forms import LoginForm
+from forms import LoginForm, CompanySelectForm
 from models import User, ROLE_USER, ROLE_ADMIN
 
+
 @app.route('/')
-@app.route('/index')
+@app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
     user = g.user
-    posts = [ # fake array of posts
-        {
-            'author': { 'nickname': 'John' },
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': { 'nickname': 'Susan' },
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
+    form = CompanySelectForm()
+    if form.validate_on_submit():
+        return redirect(url_for('test'))
     return render_template("index.html",
         title = 'Home',
         user = user,
-        posts = posts)
+        form = form)
+
+
+@app.route('/test', methods=['GET', 'POST'])
+@login_required
+def test():
+    print request.form['company_list']
+    return "TEST!"
 
 @app.route('/login', methods = ['GET', 'POST'])
 @oid.loginhandler
