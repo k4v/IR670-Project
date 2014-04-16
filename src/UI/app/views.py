@@ -3,13 +3,27 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 from app import app, db, lm, oid
 from forms import LoginForm, CompanySelectForm
 from models import User, ROLE_USER, ROLE_ADMIN
+from linkedin import linkedin
 
+authentication = None
+application = None
 
-@app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
+    global authentication
+    global application
     user = g.user
+
+    if authentication is None:
+        return redirect(url_for('authenticate_user'))
+
+    if application is None:
+        authentication.authorization_code = request.args['code']
+        authentication.get_access_token()
+        application = linkedin.LinkedInApplication(authentication)
+
+
     form = CompanySelectForm()
     if form.validate_on_submit():
         return redirect(url_for('test'))
@@ -19,17 +33,31 @@ def index():
         form = form)
 
 
+@app.route('/authenticate_user', methods=['GET', 'POST'])
+@login_required
+def authenticate_user():
+    global authentication
+    API_KEY = '75dkp5mywna5gh'
+    API_SECRET = '3KKU269ElBobsGzA'
+    RETURN_URL = 'http://localhost:5000/index'
+
+    authentication = linkedin.LinkedInAuthentication(API_KEY, API_SECRET, RETURN_URL, linkedin.PERMISSIONS.enums.values())
+
+    return redirect(authentication.authorization_url)
+
 @app.route('/test', methods=['GET', 'POST'])
 @login_required
 def test():
+    # Call appropriate scripts here
     print request.form['company_list']
     return "TEST!"
 
+@app.route('/')
 @app.route('/login', methods = ['GET', 'POST'])
 @oid.loginhandler
 def login():
     if g.user is not None and g.user.is_authenticated():
-        return redirect(url_for('index'))
+        return redirect(url_for('authenticate_user'))
     form = LoginForm()
     if form.validate_on_submit():
         session['remember_me'] = form.remember_me.data
@@ -61,7 +89,7 @@ def after_login(resp):
         remember_me = session['remember_me']
         session.pop('remember_me', None)
     login_user(user, remember = remember_me)
-    return redirect(request.args.get('next') or url_for('index'))
+    return redirect(request.args.get('next') or url_for('authenticate_user'))
 
 @app.before_request
 def before_request():
@@ -69,6 +97,10 @@ def before_request():
 
 @app.route('/logout')
 def logout():
+    global authentication
+    global application
+    authentication = None
+    application = None
     logout_user()
     return redirect(url_for('index'))
 
