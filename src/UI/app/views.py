@@ -23,6 +23,7 @@ def index():
         authentication.get_access_token()
         application = linkedin.LinkedInApplication(authentication)
 
+    #print application.get_connections()
 
     form = CompanySelectForm()
     if form.validate_on_submit():
