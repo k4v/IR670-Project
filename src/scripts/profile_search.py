@@ -16,6 +16,13 @@ dispatcher.connect(stop_reactor, signal=signals.spider_closed)
 
 linkedin_spider = AuthLinkedInSpider()
 
+start_urls = []
+for line in open('profile_urls.txt', 'r'):
+    if (not (line.strip() == '')) and (not (line.strip().startswith('#'))):
+        start_urls.append(line.strip())
+
+linkedin_spider.set_start_urls(start_urls)
+
 crawler = Crawler(Settings())
 crawler.configure()
 crawler.crawl(linkedin_spider)
