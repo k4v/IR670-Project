@@ -23,7 +23,7 @@ class AuthLinkedInSpider(InitSpider):
 
     login_page = 'https://www.linkedin.com/uas/login'
 
-    write_json = open('all_companies.json', 'w')
+    write_json = open('data/all_companies.json', 'w')
     profile_map = {}
 
     def init_request(self):
@@ -33,8 +33,8 @@ class AuthLinkedInSpider(InitSpider):
     def login(self, response):
         # Generate a login request
         return FormRequest.from_response(response,
-                                         formdata={'session_key': '',
-                                                   'session_password': ''},
+                                         formdata={'session_key': 'hailkarven@gmail.com',
+                                                   'session_password': 'brat2!Scum'},
                                          callback=self.check_login_response)
 
     def check_login_response(self, response):
