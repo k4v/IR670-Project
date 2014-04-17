@@ -8,5 +8,20 @@
 <p>
   {{post.author.nickname}} says: <b>{{post.body}}</b>
 </p>
+
+
 {% endfor %}
+ <div class="slider-wrapper theme-default">
+ <div class="ribbon"></div>
+ <div id="slider" class="nivoSlider" style="left:300px right:300px" text-align="center">
+    <img src="/static/img/nemo.jpg" alt="" />
+    <a href="http://dev7studios.com"><img src="/static/img/toystory.jpg" alt="" title="#htmlcaption" /></a>
+    <img src="/static/img/up.jpg" alt="" title="This is an example of a caption" />
+    <img src="/static/img/walle.jpg" alt="" />
+</div>
+</div>
+</div>
+<div id="htmlcaption" class="nivo-html-caption">
+    <strong>This</strong> is an example of a <em>HTML</em> caption with <a href="#">a link</a>.
+</div>
 {% endblock %}
