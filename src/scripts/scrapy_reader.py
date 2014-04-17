@@ -2,7 +2,7 @@ __author__ = 'karthik'
 
 import cPickle
 
-dump_file = open('all_companies.json', 'r')
+dump_file = open('data/all_companies.json', 'r')
 profile_dump = cPickle.load(dump_file)
 
 
