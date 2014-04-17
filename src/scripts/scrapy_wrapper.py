@@ -33,8 +33,8 @@ class AuthLinkedInSpider(InitSpider):
     def login(self, response):
         # Generate a login request
         return FormRequest.from_response(response,
-                                         formdata={'session_key': 'hailkarven@gmail.com',
-                                                   'session_password': 'brat2!Scum'},
+                                         formdata={'session_key': '',
+                                                   'session_password': ''},
                                          callback=self.check_login_response)
 
     def check_login_response(self, response):
