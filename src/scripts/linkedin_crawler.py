@@ -31,7 +31,7 @@ class LinkedInCrawler():
         return self.application
 
 
-company_names = ['Cisco']
+company_names = ['Amazon']
 position_list = ['Software Engineer', 'Software Engineer Test',
                  'Recruiter', 'Manager']
 lin_crawler = LinkedInCrawler()
@@ -50,7 +50,8 @@ for company_name in company_names:
                                                              'current-company': 'true',
                                                              'keywords': position_name,
                                                              'start': page_index * per_page_results,
-                                                             'count': per_page_results})
+                                                             'count': per_page_results,
+                                                             'sort': 'relevance'})
             # End search if we've looked at all results
             if (search_response['people']['_total'] == 0) or \
                (search_response['people']['_total'] < page_index * per_page_results):

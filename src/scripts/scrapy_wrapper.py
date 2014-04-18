@@ -23,7 +23,7 @@ class AuthLinkedInSpider(InitSpider):
 
     login_page = 'https://www.linkedin.com/uas/login'
 
-    write_json = open('data/all_companies.json', 'w')
+    write_json = open('data/amazon.pickle', 'w')
     profile_map = {}
 
     def init_request(self):
