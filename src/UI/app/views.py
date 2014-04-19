@@ -4,6 +4,11 @@ from app import app, db, lm, oid
 from forms import LoginForm, CompanySelectForm
 from models import User, ROLE_USER, ROLE_ADMIN
 from linkedin import linkedin
+import sys
+import os
+lib_path = os.path.abspath('../scripts')
+sys.path.append(lib_path)
+import scrapy_reader
 
 authentication = None
 application = None
@@ -23,11 +28,9 @@ def index():
         authentication.get_access_token()
         application = linkedin.LinkedInApplication(authentication)
 
-    #print application.get_connections()
-
     form = CompanySelectForm()
     if form.validate_on_submit():
-        return redirect(url_for('test'))
+        return redirect(url_for('profile_score'))
     return render_template("index.html",
         title = 'Home',
         user = user,
@@ -46,12 +49,21 @@ def authenticate_user():
 
     return redirect(authentication.authorization_url)
 
-@app.route('/test', methods=['GET', 'POST'])
+@app.route('/profile_score', methods=['GET', 'POST'])
 @login_required
-def test():
+def profile_score():
     # Call appropriate scripts here
-    print request.form['company_list']
-    return "TEST!"
+
+    # Get user skill list
+    user_skill_list = []
+    for item in application.get_profile(selectors=['skills'])['skills']['values']:
+        user_skill_list.append(str(item['skill']['name']))
+
+    company = request.form['company_list']
+
+    print scrapy_reader.get_company_dump(company)
+
+    return render_template("profile_score.html", company = company)
 
 @app.route('/')
 @app.route('/login', methods = ['GET', 'POST'])

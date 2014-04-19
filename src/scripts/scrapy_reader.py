@@ -1,9 +1,13 @@
 __author__ = 'karthik'
 
 import cPickle
+import os
 
+cwd = os.getcwd()
+os.chdir('../scripts')
 dump_file = open('data/all_companies.json', 'r')
 profile_dump = cPickle.load(dump_file)
+os.chdir(cwd)
 
 
 def get_company_dump(company_name):
