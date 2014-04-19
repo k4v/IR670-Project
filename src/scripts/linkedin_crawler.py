@@ -31,7 +31,7 @@ class LinkedInCrawler():
         return self.application
 
 
-company_names = ['Amazon']
+company_names = ['Intel', 'Qualcomm', 'Zinga']
 position_list = ['Software Engineer', 'Software Engineer Test',
                  'Recruiter', 'Manager']
 lin_crawler = LinkedInCrawler()
@@ -48,10 +48,10 @@ for company_name in company_names:
             search_response = app_obj.search_profile(selectors={'people': 'public-profile-url'},
                                                      params={'company-name': company_name,
                                                              'current-company': 'true',
-                                                             'keywords': position_name,
+                                                             'title': position_name,
                                                              'start': page_index * per_page_results,
                                                              'count': per_page_results,
-                                                             'sort': 'relevance'})
+                                                             'sort' : 'relevance'})
             # End search if we've looked at all results
             if (search_response['people']['_total'] == 0) or \
                (search_response['people']['_total'] < page_index * per_page_results):
