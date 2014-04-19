@@ -54,7 +54,7 @@ for company_name in company_names:
                                                              'sort' : 'relevance'})
             # End search if we've looked at all results
             if (search_response['people']['_total'] == 0) or \
-               (search_response['people']['_total'] < page_index * per_page_results):
+               (search_response['people']['_total'] <= page_index * per_page_results):
                 break
 
             for profile in search_response['people']['values']:
