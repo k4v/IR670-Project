@@ -1,0 +1,13 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Top skills at {{company}} :</h1>
+{% for skill in top_skills %}
+<p> {{skill}}</p>
+{% endfor %}
+<hr>
+<h1>Your profile score : {{score}}</h1>
+<hr>
+
+{% endblock %}
