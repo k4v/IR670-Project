@@ -16,28 +16,17 @@ def skill_score(skill_list, user_skill_list):
     skill_cos_sim = float(score)/(skill_v_mag * user_skill_mag)
     return skill_cos_sim
 
-profileList = scrapy_reader.get_company_dump('facebook')
-
-avg_sim = 0
-sim_count = 0
-IndexA = defaultdict(list)
-IndexB = defaultdict(list)
-'''
-skillsUser need to read from the UI
-hardcoding for the moment
-'''
-for i in range(0, len(profileList)):
+def score_evaluation(user_skills, user_company, user_title, user_location):
+    profile_list = scrapy_reader.get_company_dump(user_company, user_title, user_location)
+    if len(profile_list) == 0:
+        return 0
+    IndexA = defaultdict(list)
+    IndexB = defaultdict(list)
     skillsVector = {}
     skillsVector = defaultdict(lambda: 0, skillsVector)
-
-    skillsUser = profileList[i]['skills']
-    if len(skillsUser) == 0:
-        continue
-    for j in range(0, len(profileList)):
-        if i == j:
-            continue
-
-        value = profileList[j]
+    skillsUser = user_skills
+    for j in range(0, len(profile_list)):
+        value = profile_list[j]
         skillsCurrentUser = value['skills']
         for skill in skillsCurrentUser:
             skillsVector[skill] += 1
@@ -49,13 +38,13 @@ for i in range(0, len(profileList)):
     flag = 0
     for skill in sortedSkillsVector[0:len(skillsUser)]:
         IndexA[skill] = skillsVector[skill]
-        if skillsVector[skill] >= len(profileList)/2:
+        if skillsVector[skill] >= len(profile_list)/2:
             IndexB[skill] = skillsVector[skill]
         else:
             flag = 1
     if flag == 0:
         for skill in sortedSkillsVector[len(skillsUser)+1:len(sortedSkillsVector)]:
-            if skillsVector[skill] >= len(profileList)/2:
+            if skillsVector[skill] >= len(profile_list)/2:
                 IndexB[skill] = skillsVector[skill]
             else:
                 break
@@ -68,10 +57,4 @@ for i in range(0, len(profileList)):
     #skillScore = skill_score(skillsVector, skillsUser)
     #skillScore = skill_score(IndexA, skillsUser)
     skillScore = skill_score(IndexB, skillsUser)
-    print skillScore
-
-    avg_sim += skillScore
-    sim_count += 1
-
-print "Average: "+str(avg_sim/sim_count)
-
+    return skillScore
