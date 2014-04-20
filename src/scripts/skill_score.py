@@ -19,7 +19,7 @@ def skill_score(skill_list, user_skill_list):
 def score_evaluation(user_skills, user_company, user_title, user_location):
     profile_list = scrapy_reader.get_company_dump(user_company, user_title, user_location)
     if len(profile_list) == 0:
-        return 0
+        return 0, None
     IndexA = defaultdict(list)
     IndexB = defaultdict(list)
     skillsVector = {}
