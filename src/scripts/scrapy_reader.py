@@ -4,8 +4,6 @@ import cPickle
 import os
 
 
-
-
 profile_dump = {}
 
 
@@ -25,6 +23,7 @@ def get_company_dump(company_name, pos_title=False, location=False):
 
     profile_list = []
     company_name = unicode(company_name.strip().lower())
+    pos_title = unicode(pos_title.strip().lower())
 
     for profile in profile_dump:
         add_profile = False
@@ -32,9 +31,7 @@ def get_company_dump(company_name, pos_title=False, location=False):
             if (exp_item.company.strip().lower().find(company_name) >= 0 or  # Check if company name matches
                 company_name.find(exp_item.company.strip().lower()) >= 0) \
             and (exp_item.postitle.strip().lower().find(pos_title) >= 0 or   # Check if job title matches
-                pos_title.find(exp_item.postitle.strip().lower()) >= 0) \
-            and (any([x.strip() == y.strip()                                 # Check if location matches
-                      for x in exp_item.location.split(',') for y in location.split(',')])):
+                pos_title.find(exp_item.postitle.strip().lower()) >= 0):
                 add_profile = True
         if add_profile:
             profile_list.append(profile_dump[profile])

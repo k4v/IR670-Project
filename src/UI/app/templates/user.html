@@ -4,25 +4,17 @@
 {% block content %}
 <h1>User: {{user.nickname}}!</h1>
 <hr>
-{% for post in posts %}
-<p>
-  {{post.author.nickname}} says: <b>{{post.body}}</b>
-</p>
 
 
-{% endfor %}
  <div class="slider-wrapper theme-default">
  <div class="ribbon"></div>
- <div id="slider" class="nivoSlider" style="top:200px left:400px right:300px" text-align="center">
+ <div id="slider" class="nivoSlider" style="left:400px right:400px" text-align="center">
+
     <a href="http://dev7studios.com"><img src="/static/img/toystory.jpg" alt="" title="#htmlcaption" /></a>
     <img src="/static/img/up.jpg" alt="" title="This is an example of a caption" />
-    <img src="/static/img/amazon.jpeg" alt="" />
-     <img src="/static/img/bloomberg.jpeg" alt="" />
-     <img src="/static/img/facebook.jpg" alt="" />
-     <img src="/static/img/google.png" alt="" />
-     <img src="/static/img/microsoft.jpg" alt="" />
-     <img src="/static/img/nvidia.jpeg" alt="" />
-     <img src="/static/img/yahoo.png" alt="" />
+    {%for company_profile in top_companies%}
+    <img src="{{ url_for('static', filename = 'img/')}}{{company_profile[0][0].lower()}}.jpg" alt=""/>
+    {% endfor %}
 </div>
 </div>
 </div>

@@ -7,6 +7,7 @@ import numpy as nm
 def skill_score(skill_list, user_skill_list):
     skill_v = nm.array(skill_list.values())
     skill_v_mag = nm.sqrt(skill_v.dot(skill_v))
+    #print skill_v_mag
     user_skill_mag = nm.sqrt(len([x for x in skill_list if x in user_skill_list]))
 
     score = 0
@@ -19,7 +20,7 @@ def skill_score(skill_list, user_skill_list):
 def score_evaluation(user_skills, user_company, user_title, user_location):
     profile_list = scrapy_reader.get_company_dump(user_company, user_title, user_location)
     if len(profile_list) == 0:
-        return 0, None
+        return (0, {})
     IndexA = defaultdict(list)
     IndexB = defaultdict(list)
     skillsVector = {}
@@ -38,13 +39,13 @@ def score_evaluation(user_skills, user_company, user_title, user_location):
     flag = 0
     for skill in sortedSkillsVector[0:len(skillsUser)]:
         IndexA[skill] = skillsVector[skill]
-        if skillsVector[skill] >= len(profile_list)/2:
+        if skillsVector[skill] >= len(profile_list)/3:
             IndexB[skill] = skillsVector[skill]
         else:
             flag = 1
     if flag == 0:
         for skill in sortedSkillsVector[len(skillsUser)+1:len(sortedSkillsVector)]:
-            if skillsVector[skill] >= len(profile_list)/2:
+            if skillsVector[skill] >= len(profile_list)/3:
                 IndexB[skill] = skillsVector[skill]
             else:
                 break
@@ -57,4 +58,4 @@ def score_evaluation(user_skills, user_company, user_title, user_location):
     #skillScore = skill_score(skillsVector, skillsUser)
     #skillScore = skill_score(IndexA, skillsUser)
     skillScore = skill_score(IndexB, skillsUser)
-    return skillScore, IndexB
+    return skillScore, sortedSkillsVector[0:10]
