@@ -57,4 +57,4 @@ def score_evaluation(user_skills, user_company, user_title, user_location):
     #skillScore = skill_score(skillsVector, skillsUser)
     #skillScore = skill_score(IndexA, skillsUser)
     skillScore = skill_score(IndexB, skillsUser)
-    return skillScore
+    return skillScore, IndexB
