@@ -31,8 +31,8 @@ class LinkedInCrawler():
         return self.application
 
 
-company_names = ['Intel', 'Qualcomm', 'Zinga']
-position_list = ['Software Engineer', 'Software Engineer Test',
+company_names = ['Amazon']
+position_list = ['Software Engineer', 'Software Test Engineer',
                  'Recruiter', 'Manager']
 lin_crawler = LinkedInCrawler()
 app_obj = lin_crawler.create_application_object()

@@ -25,16 +25,17 @@ def get_keywords(input_text):
 
 if __name__ == '__main__':
     experience_corpus = ""
-    company_info = pickle.load( open( "data/company_dump.pickle", "rb" ) )
+    company_info = pickle.load( open( "data/amazon.pickle", "rb" ) )
     for profile in company_info:
         experience_object_list = company_info[profile]['experience']
         for item in experience_object_list:
             print item.company
-            if 'nvidia' in item.company.lower():
-                if type(item.desc) == NoneType:
-                    continue
-                else:
-                    experience_corpus += item.desc.encode('ascii', 'ignore')
+            if type(item.desc) == NoneType:
+                continue
+            else:
+                experience_corpus += item.desc.encode('ascii', 'ignore')
+
+
 
     exp_keywords = get_keywords(experience_corpus)
     """

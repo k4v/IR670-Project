@@ -17,7 +17,7 @@ dispatcher.connect(stop_reactor, signal=signals.spider_closed)
 linkedin_spider = AuthLinkedInSpider()
 
 start_urls = []
-for line in open('data/intel_dump.txt', 'r'):
+for line in open('data/amazon_dump.txt', 'r'):
     if (not (line.strip() == '')) and (not (line.strip().startswith('#'))):
         start_urls.append(line.strip())
 
