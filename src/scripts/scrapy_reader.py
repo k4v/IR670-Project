@@ -3,9 +3,8 @@ __author__ = 'karthik'
 import cPickle
 import os
 
-cwd = os.getcwd()
-os.chdir('../scripts')
-os.chdir(cwd)
+
+
 
 profile_dump = {}
 
@@ -13,9 +12,13 @@ profile_dump = {}
 def load_all_companies():
     global profile_dump
 
+    cwd = os.getcwd()
+    os.chdir('../scripts')
+
     for pickle_file in [pickle_file for pickle_file in os.listdir('data') if pickle_file.endswith('.pickle')]:
         profile_dump.update(cPickle.load(open('data/'+pickle_file, 'r')))
 
+    os.chdir(cwd)
 
 def get_company_dump(company_name, pos_title=False, location=False):
     global profile_dump
