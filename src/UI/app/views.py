@@ -6,18 +6,22 @@ from models import User, ROLE_USER, ROLE_ADMIN
 from linkedin import linkedin
 import sys
 import os
+import math
 lib_path = os.path.abspath('../scripts')
 sys.path.append(lib_path)
-import scrapy_reader
+import skill_score
 
 authentication = None
 application = None
+
+company_recommendations_based_on_score = {}
 
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
     global authentication
     global application
+    global company_recommendations_based_on_score
     user = g.user
 
     if authentication is None:
@@ -27,6 +31,21 @@ def index():
         authentication.authorization_code = request.args['code']
         authentication.get_access_token()
         application = linkedin.LinkedInApplication(authentication)
+
+        # Get user skill list
+        user_skill_list = []
+        location = application.get_profile(selectors=['location'])
+        print (location['location']['name']) + ", " + str(location['location']['country']['code'])
+        for item in application.get_profile(selectors=['skills'])['skills']['values']:
+            user_skill_list.append(str(item['skill']['name']))
+
+        for company in app.config['COMPANY_LIST']:
+            for title in app.config['PROFILE_LIST']:
+                profile_score, top_skill_vector = skill_score.score_evaluation(user_skill_list, company, title, None)
+                if (company, title) not in company_recommendations_based_on_score:
+                    if math.isnan(profile_score):
+                        profile_score = 0
+                    company_recommendations_based_on_score[(company, title)] = profile_score
 
     form = CompanySelectForm()
     if form.validate_on_submit():
@@ -56,14 +75,17 @@ def profile_score():
 
     # Get user skill list
     user_skill_list = []
+    location = application.get_profile(selectors=['location'])
+    print (location['location']['name']) + ", " + str(location['location']['country']['code'])
     for item in application.get_profile(selectors=['skills'])['skills']['values']:
         user_skill_list.append(str(item['skill']['name']))
 
     company = request.form['company_list']
+    title   = request.form['profile_list']
 
-    print scrapy_reader.get_company_dump(company)
+    profile_score, top_skill_vector = skill_score.score_evaluation(user_skill_list, company, title, location)
 
-    return render_template("profile_score.html", company = company)
+    return render_template("profile_score.html", company = company, score = profile_score, top_skills = top_skill_vector)
 
 @app.route('/')
 @app.route('/login', methods = ['GET', 'POST'])
@@ -112,8 +134,10 @@ def before_request():
 def logout():
     global authentication
     global application
+    global company_recommendations_based_on_score
     authentication = None
     application = None
+    company_recommendations_based_on_score = {}
     logout_user()
     return redirect(url_for('index'))
 
@@ -125,10 +149,14 @@ def user(nickname):
     if user == None:
         flash('User ' + nickname + ' not found.')
         return redirect(url_for('index'))
-    posts = [
-        { 'author': user, 'body': 'Test post #1' },
-        { 'author': user, 'body': 'Test post #2' }
-    ]
+
+    top_company_list = []
+    top_matched_companies = (sorted(company_recommendations_based_on_score, key = company_recommendations_based_on_score.get))[-5:]
+    for company_profile in top_matched_companies:
+        top_company_list.append((company_profile, company_recommendations_based_on_score[company_profile]))
+
+    top_company_list = sorted(top_company_list, key = lambda x: x[1])
+
     return render_template('user.html',
         user = user,
-        posts = posts)
+        top_companies = reversed(top_company_list))

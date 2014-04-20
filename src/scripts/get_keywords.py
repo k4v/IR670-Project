@@ -37,7 +37,22 @@ if __name__ == '__main__':
                     experience_corpus += item.desc.encode('ascii', 'ignore')
 
     exp_keywords = get_keywords(experience_corpus)
-    my_exp = "- Developed the software framework for the PSU card on an L2/L3 Switch. Also did basic L3 testing on the said card.Added enhancements for an STM-1 encryptor.- Developed the entire software framework ranging from device drivers to the top layer user interface for an Optical Fiber Amplifier (OFA) card used in DWDM networks.- Developed the software framework for V.35 interface in a DSL card."
+    """
+    dictionary_keywords = {}
+    word_list = experience_corpus.split()
+    for word in word_list:
+        if word in exp_keywords:
+            if word in dictionary_keywords:
+                dictionary_keywords[word] += 1
+            else:
+                dictionary_keywords[word] = 1
+    """
+
+    my_exp = "- Developed the software framework for the PSU card on an L2/L3 Switch. \
+    Also did basic L3 testing on the said card.Added enhancements for an STM-1 encryptor.\
+    - Developed the entire software framework ranging from device drivers to the top layer user interface\
+     for an Optical Fiber Amplifier (OFA) card used in DWDM networks.- Developed the software framework \
+     for V.35 interface in a DSL card."
     my_exp_keywords = get_keywords(my_exp)
     print len(my_exp_keywords)
     print exp_keywords
