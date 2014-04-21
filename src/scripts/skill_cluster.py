@@ -19,9 +19,9 @@ for profile in profileList.itervalues():
     tokenList.extend([x.lower() for x in profile['skills']])
     if len(profile['experience']) != 0:
         exp = profile['experience'][0]
-    if type(exp.desc) is not types.NoneType:
-        descTokens = get_keywords.get_keywords(exp.desc)
-        tokenList.extend(descTokens)
+        if type(exp.desc) is not types.NoneType:
+            descTokens = get_keywords.get_keywords(exp.desc)
+            tokenList.extend(descTokens)
     if i == 3:
         break
 tokenS = set(tokenList)
@@ -37,9 +37,9 @@ for profile in profileList.itervalues():
     tokens.extend([x.lower() for x in profile['skills']])
     if len(profile['experience']) != 0:
         exp = profile['experience'][0]
-    if type(exp.desc) is not types.NoneType:
-        descTokens = get_keywords.get_keywords(exp.desc)
-        tokens.extend(descTokens)
+        if type(exp.desc) is not types.NoneType:
+            descTokens = get_keywords.get_keywords(exp.desc)
+            tokens.extend(descTokens)
     tempTokens = set(tokens)
     tokens = list(tempTokens)
     #print tokens
@@ -65,6 +65,7 @@ features = array(vectorList)
 
 labels, error, nfound = Pycluster.kcluster(features, 2)
 centroids = vstack([features[labels == i].mean(0) for i in range(labels.max() + 1)])
+
 
 print labels
 print centroids
