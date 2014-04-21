@@ -4,10 +4,11 @@ import scrapy_reader
 import get_keywords
 import Pycluster
 import types
-from scipy.cluster.vq import vq, kmeans2, whiten
 from numpy import *
+from collections import defaultdict, Counter
+import operator as op
 
-k = 10  # k-means no: of clusters
+kc = 8  # k-means no: of clusters
 tokenList = []
 vectorList = []
 profileVector = []
@@ -22,8 +23,6 @@ for profile in profileList.itervalues():
         if type(exp.desc) is not types.NoneType:
             descTokens = get_keywords.get_keywords(exp.desc)
             tokenList.extend(descTokens)
-    if i == 3:
-        break
 tokenS = set(tokenList)
 tokenList = list(tokenS)
 
@@ -51,9 +50,6 @@ for profile in profileList.itervalues():
             tokenV[j] = 1.0
         j += 1
     vectorList.append(tokenV)
-    #print tokenV
-    if i == 3:
-        break
 
 print vectorList
 print profileVector
@@ -61,14 +57,40 @@ print len(tokenList)
 print len(vectorList)
 
 features = array(vectorList)
-#whitened = whiten(features)
 
-labels, error, nfound = Pycluster.kcluster(features, 2)
+labels, error, nfound = Pycluster.kcluster(features, kc)
 centroids = vstack([features[labels == i].mean(0) for i in range(labels.max() + 1)])
+s1Vector = defaultdict(list)
+s2Vector = defaultdict(list)
+Result1 = []
+Result2 = []
+for l in range(0, len(labels)):
+    s2Vector[labels[l]].append(profileVector[l][1])
+    company = profileVector[l][0]
+    for z in range(0, len(labels)):
+        if profileVector[z][0] in profileVector[l][0]:
+            if len(profileVector[z][0]) < len(company):
+                company = profileVector[z][0]
+    s1Vector[labels[l]].append(company)
 
-for 
+for l in range(0, kc):
+    temp = dict(Counter(s2Vector[l]))
+    result = sorted(temp.iteritems(), key=op.itemgetter(1), reverse=True)
+    x, y = result[0]
+    Result2.append(x)
+    temp2 = dict(Counter(s1Vector[l]))
+    result2 = sorted(temp2.iteritems(), key=op.itemgetter(1), reverse=True)
+    compL = []
+    for i in range(5):
+        if i == len(result2):
+            break
+        x, y = result2[i]
+        compL.append(x)
+    Result1.append(compL)
 
 print labels
 print centroids
+print Result2
+print Result1
 
 
