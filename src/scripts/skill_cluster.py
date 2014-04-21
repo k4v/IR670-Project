@@ -66,6 +66,7 @@ features = array(vectorList)
 labels, error, nfound = Pycluster.kcluster(features, 2)
 centroids = vstack([features[labels == i].mean(0) for i in range(labels.max() + 1)])
 
+for 
 
 print labels
 print centroids
