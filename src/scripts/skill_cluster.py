@@ -89,8 +89,9 @@ for l in range(0, kc):
     Result1.append(compL)
 
 print labels
-print centroids
-print Result2
-print Result1
+print centroids #(Type - ndarray)
+print Result2 # (Type - list) List of position(job title) for each cluster
+print Result1 # (Type- list of list) List of recommended companies for each cluster
+#tokenList - list of tokens as a vector
 
 
