@@ -36,9 +36,9 @@ for profile in profileList.itervalues():
         if type(exp.desc) is not types.NoneType:
             descTokens = get_keywords.get_keywords(exp.desc)
             tokens.extend(descTokens)
+        profileVector.append([exp.company.lower(), exp.postitle.lower()])
     tempTokens = set(tokens)
     tokens = list(tempTokens)
-    profileVector.append([exp.company.lower(), exp.postitle.lower()])
     tokenV = [0.0] * len(tokenList)
     j = 0
     for t in tokenList:
@@ -47,6 +47,9 @@ for profile in profileList.itervalues():
         j += 1
     vectorList.append(tokenV)
 
+'''
+Logging intermediate results
+'''
 print vectorList
 print profileVector
 print len(tokenList)
@@ -84,11 +87,13 @@ for l in range(0, kc):
         compL.append(x)
     Result1.append(compL)
 
+'''
+Logging clustering results
+'''
 print labels
 print centroids #(Type - ndarray)
 print Result2 # (Type - list) List of position(job title) for each cluster
 print Result1 # (Type- list of list) List of recommended companies for each cluster
-
 
 cluster_dump = {'tokens': tokenList, 'centroids': centroids, 'recos': Result1, 'job_titles': Result2}
 cPickle.dump(cluster_dump, open('data/cluster_dump.txt', 'w'))
