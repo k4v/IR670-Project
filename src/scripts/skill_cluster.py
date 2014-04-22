@@ -7,6 +7,7 @@ import types
 from numpy import *
 from collections import defaultdict, Counter
 import operator as op
+import cPickle
 
 kc = 8  # k-means no: of clusters
 tokenList = []
@@ -95,3 +96,5 @@ print Result1 # (Type- list of list) List of recommended companies for each clus
 #tokenList - list of tokens as a vector
 
 
+cluster_dump = {'tokens': tokenList, 'centroids': centroids, 'recos': Result1, 'job_titles': Result2}
+cPickle.dump(cluster_dump, open('data/cluster_dump.txt', 'w'))
