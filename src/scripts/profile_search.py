@@ -5,7 +5,7 @@ from scrapy.crawler import Crawler
 from scrapy.settings import Settings
 from scrapy.xlib.pydispatch import dispatcher
 from scrapy import log, signals
-from scrapy_wrapper import *
+from scrapy_wrap import *
 from twisted.internet import reactor
 
 
