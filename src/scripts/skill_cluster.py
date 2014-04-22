@@ -15,9 +15,7 @@ vectorList = []
 profileVector = []
 profileList = scrapy_reader.profile_dump
 
-i=0
 for profile in profileList.itervalues():
-    i += 1
     tokenList.extend([x.lower() for x in profile['skills']])
     if len(profile['experience']) != 0:
         exp = profile['experience'][0]
@@ -30,9 +28,7 @@ tokenList = list(tokenS)
 '''
 Forming token vectors and profiling of users
 '''
-i = 0
 for profile in profileList.itervalues():
-    i += 1
     tokens = []
     tokens.extend([x.lower() for x in profile['skills']])
     if len(profile['experience']) != 0:
@@ -42,7 +38,6 @@ for profile in profileList.itervalues():
             tokens.extend(descTokens)
     tempTokens = set(tokens)
     tokens = list(tempTokens)
-    #print tokens
     profileVector.append([exp.company.lower(), exp.postitle.lower()])
     tokenV = [0.0] * len(tokenList)
     j = 0
@@ -93,7 +88,6 @@ print labels
 print centroids #(Type - ndarray)
 print Result2 # (Type - list) List of position(job title) for each cluster
 print Result1 # (Type- list of list) List of recommended companies for each cluster
-#tokenList - list of tokens as a vector
 
 
 cluster_dump = {'tokens': tokenList, 'centroids': centroids, 'recos': Result1, 'job_titles': Result2}
