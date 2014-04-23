@@ -16,10 +16,14 @@ lib_path = os.path.abspath('../scripts')
 sys.path.append(lib_path)
 import skill_score
 import get_keywords
+import cluster_recommender
 
 authentication = None
 application = None
 linkedin_user_name = ''
+user_cluster = None
+recommended_companies = None
+recommended_profile = None
 company_recommendations_based_on_score = {}
 
 @app.route('/')
@@ -30,6 +34,9 @@ def index():
     global application
     global company_recommendations_based_on_score
     global linkedin_user_name
+    global user_cluster
+    global recommended_companies
+    global recommended_profile
 
     #if(os.path.isfile('./app/static/img/graph*.png')):
     #    os.remove('./app/static/img/graph.png')
@@ -60,6 +67,10 @@ def index():
                 user_experience += item['summary']
 
         #print get_keywords.get_keywords(user_experience)
+        user_cluster = cluster_recommender.cluster_score(user_experience, user_skill_list)
+
+        recommended_companies = [x.encode('ascii', 'ignore') for x in user_cluster[0]]
+        recommended_profile   = user_cluster[1]
 
         for item in application.get_profile(selectors=['skills'])['skills']['values']:
             user_skill_list.append(str(item['skill']['name']))
@@ -138,7 +149,7 @@ def profile_score():
     plt.savefig(file_name, bbox_inches='tight', transparent = True)
     plt.clf()
 
-    return render_template("profile_score.html", company = company, score = profile_score,
+    return render_template("profile_score.html", company = company, score = profile_score, profile = title,
                            top_skills = top_skill_vector, user_skills = user_skill_list, curr_time = datetime.datetime.now().time())
 
 
@@ -189,8 +200,10 @@ def logout():
     global authentication
     global application
     global company_recommendations_based_on_score
+    global user_cluster
     authentication = None
     application = None
+    user_cluster = None
     linkedin_user_name = ''
     company_recommendations_based_on_score = {}
     logout_user()
@@ -200,6 +213,10 @@ def logout():
 @app.route('/user/<nickname>')
 @login_required
 def user(nickname):
+    global user_cluster
+    global recommended_companies
+    global recommended_profile
+
     user = User.query.filter_by(nickname = nickname).first()
     if user == None:
         #flash('User ' + nickname + ' not found.')
@@ -212,6 +229,11 @@ def user(nickname):
 
     top_company_list = sorted(top_company_list, key = lambda x: x[1])
 
+    print 'reco:'
+    print recommended_companies
+    print recommended_profile
     return render_template('user.html',
         user = linkedin_user_name,
-        top_companies = reversed(top_company_list))
+        top_companies = reversed(top_company_list),
+        recommended_companies = recommended_companies,
+        recommended_profile = recommended_profile)

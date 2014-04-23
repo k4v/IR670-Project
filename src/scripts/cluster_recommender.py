@@ -2,13 +2,17 @@ __author__ = 'Nikhil'
 
 import cPickle
 import get_keywords
+import os
 from numpy import *
 
 def cluster_score(user_desc, user_skills):
     user_keywords = list(get_keywords.get_keywords(user_desc))
     user_keywords.extend([x.lower() for x in user_skills])
+    cwd = os.getcwd()
+    os.chdir('../scripts')
     cluster_file = 'cluster_dump.txt'
     clusterDump = cPickle.load(open('data/'+cluster_file, 'r'))
+    os.chdir(cwd)
     token_lists = clusterDump['tokens']
     token_vector = array([0.0] * len(token_lists))
     n = 0
@@ -27,14 +31,12 @@ def cluster_score(user_desc, user_skills):
     of the centroids using Euclidean distance between the vectors and normalizing
     based on the magnitude of the centroids.
     '''
-    v1 = sqrt(centroids[0].dot(centroids[0]))
     minV = centroids[0] - token_vector
-    minMag = sqrt(minV.dot(minV))/v1
+    minMag = sqrt(minV.dot(minV))
     cluster_value = 0
     for i in range(1, len(centroids)):
-        v1 = sqrt(centroids[i].dot(centroids[i]))
         diff = centroids[i] - token_vector
-        mag = sqrt(diff.dot(diff))/v1
+        mag = sqrt(diff.dot(diff))
         if mag < minMag:
             minMag = mag
             cluster_value = i

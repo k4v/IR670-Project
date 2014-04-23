@@ -6,7 +6,6 @@
 <h1>{{user}}, the following positions might interest you!</h1>
 <hr>
 
-
  <div class="slider-wrapper theme-default">
  <div class="ribbon"></div>
  <div id="slider" class="nivoSlider" style="left:400px right:400px" text-align="center">
@@ -16,5 +15,22 @@
 </div>
 </div>
 </div>
+</div>
+
+<div class="well">
+
+<hr>
+<h1>{{user}}, people with similar skills and experience as you are interested in these companies for {{recommended_profile}} positions!</h1>
+<hr>
+ <div class="slider-wrapper theme-default">
+ <div class="ribbon"></div>
+ <div id="slider2" class="nivoSlider" style="left:400px right:400px" text-align="center">
+    {%for company in recommended_companies%}
+    <a href ="https://www.linkedin.com/vsearch/j?company={{company}}&title={{recommended_profile}}" target="_blank"><img src="{{ url_for('static', filename = 'img/')}}{{company.lower()}}.jpg" alt="" title=""/></a>
+    {% endfor %}
+</div>
+</div>
+</div>
+
 </div>
 {% endblock %}
