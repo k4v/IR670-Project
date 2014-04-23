@@ -6,7 +6,7 @@ from numpy import *
 
 def cluster_score(user_desc, user_skills):
     user_keywords = list(get_keywords.get_keywords(user_desc))
-    user_keywords.extend(user_skills)
+    user_keywords.extend([x.lower() for x in user_skills])
     cluster_file = 'cluster_dump.txt'
     clusterDump = cPickle.load(open('data/'+cluster_file, 'r'))
     token_lists = clusterDump['tokens']
@@ -24,14 +24,17 @@ def cluster_score(user_desc, user_skills):
     recommendations = clusterDump['recos']
     '''
     Calculating similarity of current user's token vector with each
-    of the centroids using Euclidean distance between the vectors.
+    of the centroids using Euclidean distance between the vectors and normalizing
+    based on the magnitude of the centroids.
     '''
+    v1 = sqrt(centroids[0].dot(centroids[0]))
     minV = centroids[0] - token_vector
-    minMag = sqrt(minV.dot(minV))
+    minMag = sqrt(minV.dot(minV))/v1
     cluster_value = 0
     for i in range(1, len(centroids)):
+        v1 = sqrt(centroids[i].dot(centroids[i]))
         diff = centroids[i] - token_vector
-        mag = sqrt(diff.dot(diff))
+        mag = sqrt(diff.dot(diff))/v1
         if mag < minMag:
             minMag = mag
             cluster_value = i
@@ -43,9 +46,9 @@ Code for testing above function
 ================================
 '''
 '''
-user_desc1 = "hello my name is Nikhil, working in Java, python  etc"
-user_skillst = ['Java', 'C', 'Python', 'C++']
-x, y = cluster_score(user_desc1, user_skillst)
+user_desc1 = "hadoop, working in Agile, Scrum  etc trainer recruiter manager team lead agile engineering manager"
+user_skills1 = ['Python', 'Java', 'C', 'C++', 'Perl', 'Recruiter', 'Testing', 'QA', 'Quality Assurance']
+x, y = cluster_score(user_desc1, user_skills1)
 print x
 print y
 '''

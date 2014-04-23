@@ -46,6 +46,13 @@ def score_evaluation(user_skills, user_company, user_title, user_location):
     Skill Score evaluation
     '''
     sortedSkillsVector = sorted(skillsVector, key=lambda key: skillsVector[key], reverse=True)
+    '''
+    Sorted skills formatted to display on UI
+    '''
+    display_skills = []
+    for skills_vector in sortedSkillsVector:
+        display_skills.append(skills_vector.title())
+
     flag = 0
     for skill in sortedSkillsVector[0:len(skillsUser)]:
         IndexA[skill] = skillsVector[skill]
@@ -68,4 +75,4 @@ def score_evaluation(user_skills, user_company, user_title, user_location):
     #skillScore = skill_score(skillsVector, skillsUser)
     #skillScore = skill_score(IndexA, skillsUser)
     skillScore = skill_score(IndexB, skillsUser)
-    return skillScore, sortedSkillsVector[0:10]
+    return skillScore, display_skills[0:10]
