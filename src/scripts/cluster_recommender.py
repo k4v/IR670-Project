@@ -27,14 +27,12 @@ def cluster_score(user_desc, user_skills):
     of the centroids using Euclidean distance between the vectors and normalizing
     based on the magnitude of the centroids.
     '''
-    v1 = sqrt(centroids[0].dot(centroids[0]))
     minV = centroids[0] - token_vector
-    minMag = sqrt(minV.dot(minV))/v1
+    minMag = sqrt(minV.dot(minV))
     cluster_value = 0
     for i in range(1, len(centroids)):
-        v1 = sqrt(centroids[i].dot(centroids[i]))
         diff = centroids[i] - token_vector
-        mag = sqrt(diff.dot(diff))/v1
+        mag = sqrt(diff.dot(diff))
         if mag < minMag:
             minMag = mag
             cluster_value = i
@@ -52,3 +50,4 @@ x, y = cluster_score(user_desc1, user_skills1)
 print x
 print y
 '''
+
