@@ -229,9 +229,6 @@ def user(nickname):
 
     top_company_list = sorted(top_company_list, key = lambda x: x[1])
 
-    print 'reco:'
-    print recommended_companies
-    print recommended_profile
     return render_template('user.html',
         user = linkedin_user_name,
         top_companies = reversed(top_company_list),

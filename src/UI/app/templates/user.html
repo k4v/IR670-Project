@@ -26,7 +26,7 @@
  <div class="ribbon"></div>
  <div id="slider2" class="nivoSlider" style="left:400px right:400px" text-align="center">
     {%for company in recommended_companies%}
-    <a href ="https://www.linkedin.com/vsearch/j?company={{company}}&title={{recommended_profile}}" target="_blank"><img src="{{ url_for('static', filename = 'img/')}}{{company.lower()}}.jpg" alt="" title=""/></a>
+    <a href ="https://www.linkedin.com/vsearch/j?company={{company}}&title={{recommended_profile}}" target="_blank"><img src="{{ url_for('static', filename = 'img/')}}{{company.lower()}}.jpg" alt="{{company}}" title="Click on the image to apply to open job positions. "/></a>
     {% endfor %}
 </div>
 </div>
