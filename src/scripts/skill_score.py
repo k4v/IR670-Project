@@ -25,10 +25,10 @@ def score_evaluation(user_skills, user_company, user_title, user_location):
     IndexB = defaultdict(list)
     skillsVector = {}
     skillsVector = defaultdict(lambda: 0, skillsVector)
-    skillsUser = user_skills
+    skillsUser = [x.lower() for x in user_skills]
     for j in range(0, len(profile_list)):
         value = profile_list[j]
-        skillsCurrentUser = value['skills']
+        skillsCurrentUser = [x.lower() for x in value['skills']]
         for skill in skillsCurrentUser:
             skillsVector[skill] += 1
 
