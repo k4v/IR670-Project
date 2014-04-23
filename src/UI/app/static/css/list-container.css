@@ -1,0 +1,48 @@
+#navcontainer ul
+{
+margin: 0;
+padding: 0;
+list-style-type: none;
+text-align: center;
+}
+
+#navcontainer ul li
+{
+margin: 0 auto;
+font-size: 0.8em;
+background-color: rgb(220, 220, 220);
+background-image:url('/static/img/gradient.png');
+text-align: left;
+width: 175px;
+margin-top: 3px;
+padding: 6px 2px 6px 2px;
+}
+
+#navcontainer ul li a
+{
+text-decoration: none;
+padding: .2em 1em;
+margin-left: 15px;
+color: #155;
+}
+
+#navcontainer ul li div[class="no_tick_skill"]
+{
+width:200px;
+}
+
+#navcontainer ul li div[class="tick_skill"]
+{
+width:200px;
+background-image: url('/static/img/check.png');
+background-repeat: no-repeat;
+}
+
+#navcontainer ul li:hover
+{
+background-color: #369;
+}
+#navcontainer ul li a:hover
+{
+text-color: #fff;
+}
