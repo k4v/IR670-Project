@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="well">
-<h1>Hi, {{user.nickname}}!</h1>
+<h1>Hi, {{user}}!</h1>
 <form action="{{ url_for('profile_score') }}" method="post" name="company-profile">
     {{form.hidden_tag()}}
     <table width="400">

@@ -7,21 +7,38 @@ from linkedin import linkedin
 import sys
 import os
 import math
+import datetime
+import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+
 lib_path = os.path.abspath('../scripts')
 sys.path.append(lib_path)
 import skill_score
+import get_keywords
 
 authentication = None
 application = None
-
+linkedin_user_name = ''
 company_recommendations_based_on_score = {}
 
+@app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
 @login_required
 def index():
     global authentication
     global application
     global company_recommendations_based_on_score
+    global linkedin_user_name
+
+    #if(os.path.isfile('./app/static/img/graph*.png')):
+    #    os.remove('./app/static/img/graph.png')
+
+    my_dir = './app/static/img/'
+    for fname in os.listdir(my_dir):
+        if fname.startswith("graph"):
+            os.remove(os.path.join(my_dir, fname))
+
     user = g.user
 
     if authentication is None:
@@ -35,7 +52,15 @@ def index():
         # Get user skill list
         user_skill_list = []
         location = application.get_profile(selectors=['location'])
-        print (location['location']['name']) + ", " + str(location['location']['country']['code'])
+        linkedin_user_name = application.get_profile(selectors=['first-name'])['firstName']
+
+        user_experience = ''
+        for item in application.get_profile(selectors=['positions'])['positions']['values']:
+            if 'summary' in item:
+                user_experience += item['summary']
+
+        #print get_keywords.get_keywords(user_experience)
+
         for item in application.get_profile(selectors=['skills'])['skills']['values']:
             user_skill_list.append(str(item['skill']['name']))
 
@@ -45,14 +70,15 @@ def index():
                 if (company, title) not in company_recommendations_based_on_score:
                     if math.isnan(profile_score):
                         profile_score = 0
-                    company_recommendations_based_on_score[(company, title)] = profile_score
+                    company_recommendations_based_on_score[(company, title)] = math.ceil(profile_score*100)
 
+    #print application.search_job(selectors=[{'jobs': ['id', 'customer-job-code', 'posting-date', 'position', 'location']}], params={'company-name' : 'Google', 'job-title' : 'Software Engineer', 'count': 10})
     form = CompanySelectForm()
     if form.validate_on_submit():
         return redirect(url_for('profile_score'))
     return render_template("index.html",
         title = 'Home',
-        user = user,
+        user = linkedin_user_name,
         form = form)
 
 
@@ -76,7 +102,7 @@ def profile_score():
     # Get user skill list
     user_skill_list = []
     location = application.get_profile(selectors=['location'])
-    print (location['location']['name']) + ", " + str(location['location']['country']['code'])
+    #print (location['location']['name']) + ", " + str(location['location']['country']['code'])
     for item in application.get_profile(selectors=['skills'])['skills']['values']:
         user_skill_list.append(str(item['skill']['name']))
 
@@ -84,10 +110,38 @@ def profile_score():
     title   = request.form['profile_list']
 
     profile_score, top_skill_vector = skill_score.score_evaluation(user_skill_list, company, title, location)
+    if math.isnan(profile_score):
+        profile_score = 0
+    profile_score = math.ceil(profile_score*100)
 
-    return render_template("profile_score.html", company = company, score = profile_score, top_skills = top_skill_vector)
+    employee_scores = skill_score.evaluate_employee_scores(company, title, location)
+    employee_scores = [math.ceil(x*100) for x in employee_scores]
+    employee_scores = [value for value in employee_scores if not math.isnan(value)]
 
-@app.route('/')
+
+    employee_scores.append(profile_score)
+    sorted_scores = sorted(employee_scores)
+
+    user_score_index = sorted_scores.index(profile_score) + 1
+
+    ax = plt.subplot('111', axisbg='#EBEBEB')
+    spines_to_remove = ['top', 'right']
+    for spine in spines_to_remove:
+        ax.spines[spine].set_visible(False)
+
+    plt.scatter(range(1,len(employee_scores)+1), sorted_scores, linestyle='--', marker='o', color='b')
+    plt.xlabel('Employee Number')
+    plt.ylabel('Profile Score')
+    plt.annotate('You', xy=(user_score_index, profile_score), xytext=(user_score_index - 0.3, profile_score + 5), textcoords = 'offset points', ha = 'right', va = 'bottom',
+        bbox = dict(boxstyle = 'round,pad=0.5', fc = 'yellow', alpha = 0.5), arrowprops=dict(arrowstyle = '->', connectionstyle = 'arc3,rad=0'))
+    file_name = './app/static/img/graph_'+str(company)+'.png'
+    plt.savefig(file_name, bbox_inches='tight', transparent = True)
+    plt.clf()
+
+    return render_template("profile_score.html", company = company, score = profile_score,
+                           top_skills = top_skill_vector, user_skills = user_skill_list, curr_time = datetime.datetime.now().time())
+
+
 @app.route('/login', methods = ['GET', 'POST'])
 @oid.loginhandler
 def login():
@@ -137,6 +191,7 @@ def logout():
     global company_recommendations_based_on_score
     authentication = None
     application = None
+    linkedin_user_name = ''
     company_recommendations_based_on_score = {}
     logout_user()
     return redirect(url_for('index'))
@@ -147,16 +202,16 @@ def logout():
 def user(nickname):
     user = User.query.filter_by(nickname = nickname).first()
     if user == None:
-        flash('User ' + nickname + ' not found.')
+        #flash('User ' + nickname + ' not found.')
         return redirect(url_for('index'))
 
     top_company_list = []
-    top_matched_companies = (sorted(company_recommendations_based_on_score, key = company_recommendations_based_on_score.get))[-5:]
+    top_matched_companies = (sorted(company_recommendations_based_on_score, key = company_recommendations_based_on_score.get))[-7:]
     for company_profile in top_matched_companies:
         top_company_list.append((company_profile, company_recommendations_based_on_score[company_profile]))
 
     top_company_list = sorted(top_company_list, key = lambda x: x[1])
 
     return render_template('user.html',
-        user = user,
+        user = linkedin_user_name,
         top_companies = reversed(top_company_list))

@@ -2,23 +2,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>User: {{user.nickname}}!</h1>
+<div class="well">
+<h1>{{user}}, the following positions might interest you!</h1>
 <hr>
 
 
  <div class="slider-wrapper theme-default">
  <div class="ribbon"></div>
  <div id="slider" class="nivoSlider" style="left:400px right:400px" text-align="center">
-
-    <a href="http://dev7studios.com"><img src="/static/img/toystory.jpg" alt="" title="#htmlcaption" /></a>
-    <img src="/static/img/up.jpg" alt="" title="This is an example of a caption" />
     {%for company_profile in top_companies%}
-    <img src="{{ url_for('static', filename = 'img/')}}{{company_profile[0][0].lower()}}.jpg" alt=""/>
+    <a href ="https://www.linkedin.com/vsearch/j?company={{company_profile[0][0]}}&title={{company_profile[0][1]}}" target="_blank"><img src="{{ url_for('static', filename = 'img/')}}{{company_profile[0][0].lower()}}.jpg" alt="" title="You have a profile score of {{company_profile[1]}} for the {{company_profile[0][1]}} position at this company. Click on the image to apply to open job positions. "/></a>
     {% endfor %}
 </div>
 </div>
 </div>
-<div id="htmlcaption" class="nivo-html-caption">
-    <strong>This</strong> is an example of a <em>HTML</em> caption with <a href="#">a link</a>.
 </div>
 {% endblock %}

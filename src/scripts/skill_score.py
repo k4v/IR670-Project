@@ -17,6 +17,16 @@ def skill_score(skill_list, user_skill_list):
     skill_cos_sim = float(score)/(skill_v_mag * user_skill_mag)
     return skill_cos_sim
 
+def evaluate_employee_scores(company, title, location):
+    profile_list = scrapy_reader.get_company_dump(company, title, location)
+    employee_scores = [None]*len(profile_list)
+    for i in range(0, len(profile_list)):
+        current_employee_profile = profile_list[i]
+        skills_current_user = current_employee_profile['skills']
+        employee_scores[i], vector = score_evaluation(skills_current_user, company, title, location)
+
+    return employee_scores
+
 def score_evaluation(user_skills, user_company, user_title, user_location):
     profile_list = scrapy_reader.get_company_dump(user_company, user_title, user_location)
     if len(profile_list) == 0:
